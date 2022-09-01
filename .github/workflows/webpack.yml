@@ -1,0 +1,35 @@
+name: Pack Firefox extension with Webpack
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+    
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Build
+      run: |
+        npm install
+        npx webpack
+        
+    - name: Package
+      uses: actions/upload-artifact@v3.1.0
+      with:
+        name: zipit-node-${{ matrix.node-version }}-${{ github.sha }}
+        path: dist/*
+        

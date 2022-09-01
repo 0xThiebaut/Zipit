@@ -1,0 +1,23 @@
+{
+  "name": "zipit",
+  "version": "1.0.0",
+  "description": "A Firefox extension to encrypt files downloaded through Microsoft 365 Defender's Live Response Sessions.",
+  "main": "src/extension.ts",
+  "typess": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["ZIP", "Infected", "Microsoft 365 Defender", "Live Response Session"],
+  "author": "Maxime THIEBAUT (@0xThiebaut)",
+  "license": "EUPL-1.2",
+  "devDependencies": {
+    "@types/webextension-polyfill": "^0.9.0",
+    "copy-webpack-plugin": "^11.0.0",
+    "ts-loader": "^9.3.1",
+    "typescript": "^4.7.4",
+    "webpack-cli": "^4.10.0"
+  },
+  "dependencies": {
+    "webextension-polyfill": "^0.10.0"
+  }
+}
