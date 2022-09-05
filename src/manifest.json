@@ -2,13 +2,15 @@
   "name": "Zipit",
   "description": "Encrypt Microsoft 365 Defender Live Response Session Downloads",
   "author": "Maxime THIEBAUT (@0xThiebaut)",
-  "version": "1.0",
+  "version": "1.1",
   "manifest_version": 2,
   "permissions": [
     "webRequest",
     "webRequestBlocking",
     "https://security.microsoft.com/apiproxy/mtp/automatedIr/v2/live_response/commands/*",
-    "https://security.microsoft.com/apiproxy/mtp/automatedIr/v2/live_response/download_file?*"
+    "https://security.microsoft.com/apiproxy/mtp/automatedIr/v2/live_response/download_file?*",
+    "https://security.microsoft.com/apiproxy/mtp/k8s/cloud/live_response/commands/*",
+    "https://security.microsoft.com/apiproxy/mtp/k8s/cloud/live_response/download_file?*"
   ],
   "background": {
     "scripts": [

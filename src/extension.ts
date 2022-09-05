@@ -18,13 +18,7 @@ interface GetFileCommandStatus {
         download_token: string;
         download_file_name: string;
     };
-    output: {
-        download_token: string;
-        download_file_name: string;
-    };
 }
-
-// Create CRC_TABLE
 
 function onBeforeCommandStatus(details: browser.WebRequest.OnBeforeRequestDetailsType): (void | browser.WebRequest.BlockingResponseOrPromise) {
     // Validate it is an expected GET request
@@ -34,7 +28,7 @@ function onBeforeCommandStatus(details: browser.WebRequest.OnBeforeRequestDetail
     }
     // Validate the API version is V2
     const url = new URL(details.url);
-    if (url.searchParams.get("useV2Api") !== "true" || url.searchParams.get("useV3Api") !== "false" || !url.searchParams.has("session_id")) {
+    if (!(url.searchParams.has("useV2Api") || url.searchParams.has("useV3Api")) || !url.searchParams.has("session_id")) {
         console.warn("Skipping incompatible " + details.url);
         return {};
     }
@@ -71,7 +65,6 @@ function onBeforeCommandStatus(details: browser.WebRequest.OnBeforeRequestDetail
 
             // Update the download_file_name to be a ZIP
             status.context.download_file_name = status.context.download_file_name + ".zip"
-            status.output.download_file_name = status.output.download_file_name + ".zip"
 
             // Encode the JSON
             str = JSON.stringify(response)
@@ -98,7 +91,7 @@ function onBeforeDownloadFile(details: browser.WebRequest.OnBeforeRequestDetails
     const url = new URL(details.url);
     const session_id = url.searchParams.get("session_id")
     const download_token = url.searchParams.get("token")
-    if (url.searchParams.get("useV2Api") !== "true" || url.searchParams.get("useV3Api") !== "false" || !session_id || !download_token) {
+    if (!(url.searchParams.has("useV2Api") || url.searchParams.has("useV3Api")) || !session_id || !download_token) {
         console.warn("Skipping incompatible " + details.url);
         return {};
     }
@@ -154,12 +147,12 @@ function onBeforeDownloadFile(details: browser.WebRequest.OnBeforeRequestDetails
 
 browser.webRequest.onBeforeRequest.addListener(
     onBeforeCommandStatus,
-    {urls: ["https://security.microsoft.com/apiproxy/mtp/automatedIr/v2/live_response/commands/*"]},
+    {urls: ["https://security.microsoft.com/apiproxy/mtp/automatedIr/v2/live_response/commands/*", "https://security.microsoft.com/apiproxy/mtp/k8s/cloud/live_response/commands/*"]},
     ["blocking"]
 );
 
 browser.webRequest.onBeforeRequest.addListener(
     onBeforeDownloadFile,
-    {urls: ["https://security.microsoft.com/apiproxy/mtp/automatedIr/v2/live_response/download_file?*"]},
+    {urls: ["https://security.microsoft.com/apiproxy/mtp/automatedIr/v2/live_response/download_file?*", "https://security.microsoft.com/apiproxy/mtp/k8s/cloud/live_response/download_file?*"]},
     ["blocking"]
 );
